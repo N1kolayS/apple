@@ -53,4 +53,9 @@ class OnTreeState extends BaseAppleState
     {
         return 'grown';
     }
+
+    public function canFall(): bool
+    {
+        return true;
+    }
 }

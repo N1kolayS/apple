@@ -78,6 +78,12 @@ class OnGroundState extends BaseAppleState
 
     public function getImage(): string
     {
+        $this->checkCondition();
         return 'fresh';
+    }
+
+    public function canFall(): bool
+    {
+        return false;
     }
 }

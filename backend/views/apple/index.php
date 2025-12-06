@@ -155,8 +155,11 @@ $this->registerJs($js);
                     {
                         $content[] = Html::tag('strong', $apple->status);
                         $content[] = Html::tag('br');
-                        $content[] = Html::button('Уронить', ['class' => 'btn btn-info btn-fall',
-                            'data-url' => Url::to(['fall' , 'id' => $apple->id])]);
+                        if ($apple->canFall()) {
+                            $content[] = Html::button('Уронить', ['class' => 'btn btn-info btn-fall',
+                                'data-url' => Url::to(['fall' , 'id' => $apple->id])]);
+                        }
+
 
                         return implode("\n", $content);
                     }

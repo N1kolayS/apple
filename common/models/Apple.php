@@ -217,4 +217,9 @@ class Apple extends \yii\db\ActiveRecord implements FruitInterface
     {
         return '/img/apple/'.$this->state->getImage().'.jpg';
     }
+
+    public function canFall(): bool
+    {
+        return $this->state->canFall();
+    }
 }

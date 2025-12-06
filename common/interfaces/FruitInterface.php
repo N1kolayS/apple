@@ -33,6 +33,12 @@ interface FruitInterface
     public function canEat(): bool;
 
     /**
+     * Проверяет, может ли упасть
+     * @return bool
+     */
+    public function canFall(): bool;
+
+    /**
      * Изображение фрукта
      * @return string
      */

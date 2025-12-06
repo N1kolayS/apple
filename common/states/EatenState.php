@@ -36,4 +36,9 @@ class EatenState extends BaseAppleState
     {
         return 'blank';
     }
+
+    public function canFall(): bool
+    {
+        return false;
+    }
 }

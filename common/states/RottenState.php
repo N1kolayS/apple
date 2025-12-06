@@ -36,4 +36,9 @@ class RottenState extends BaseAppleState
     {
         return 'rotten';
     }
+
+    public function canFall(): bool
+    {
+        return false;
+    }
 }

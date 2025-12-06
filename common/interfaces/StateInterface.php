@@ -17,6 +17,8 @@ interface StateInterface
      */
     public function checkCondition(): void;
     public function canEat(): bool;
+
+    public function canFall(): bool;
     public function getStatus(): string;
 
     /**
