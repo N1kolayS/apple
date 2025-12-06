@@ -60,7 +60,7 @@ $this->registerJs($js);
                 'appearance_date',
                 'fall_date',
                 'status',
-                //'size',
+                'size',
 
             ],
         ]); ?>

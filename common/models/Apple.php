@@ -84,12 +84,18 @@ class Apple extends \yii\db\ActiveRecord implements FruitInterface
         }
     }
 
+
     /**
-     * @return float
+     * В базе данных храним в int. В выводе делаем в процентах
+     * @param $name
+     * @return mixed
      */
-    public function getSize():float
+    public function __get($name)
     {
-        return $this->size/100;
+        if ($name == 'size') {
+            return (float)parent::__get($name)/100;
+        }
+        return parent::__get($name);
     }
 
     /**
