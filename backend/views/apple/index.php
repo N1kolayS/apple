@@ -37,13 +37,51 @@ MAIN_GRID.on('click', '.btn-fall', function (e) {
 
 });
 
+MAIN_GRID.on('click', '.btn-eat', function (e) {
+    e.preventDefault();
+    let url = $(this).data('url')
+    let promptSize = prompt('Сколько откусить от 1 до 100?:', '25');
+  let size = parseInt(promptSize)
+  if (size < 1 || size > 100) {
+        alert('Введите число от 1 до 100');
+        return;
+    } 
+ 
+        
+      $.ajax({
+            url: url,
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                    size: size
+                },
+            cache: false,
+            success: function (json) {
+                $.pjax.reload({container: '#main_grid', async: false});    
+            },
+                error: function(json) {
+                    alert(json.responseText);
+                }
+      });
+    
+
+});
+
 $("#grown_apple").click(function(e) {
   let url = $(this).data('url')
-
-  $.ajax({
+  let promptApple = prompt('Сколько яблок сделать?:', '5');
+  let countApple = parseInt(promptApple)
+  if (countApple < 1 || countApple > 20) {
+        alert('Введите число от 1 до 20');
+        return;
+    } 
+    $.ajax({
                 url: url,
                 type: 'POST',
                 dataType: 'JSON',
+                data: {
+                    count: countApple
+                },
                 cache: false,
                 success: function (json) {
           
@@ -54,6 +92,7 @@ $("#grown_apple").click(function(e) {
                     alert(json.responseText);
                 }
         })
+
 })
 
 
@@ -122,7 +161,24 @@ $this->registerJs($js);
                         return implode("\n", $content);
                     }
                 ],
-                'size',
+
+                [
+                    'attribute' => 'size',
+
+                    'content' => function(Apple $apple)
+                    {
+                        $content[] = Html::tag('strong', $apple->size);
+                        $content[] = Html::tag('br');
+                        if ($apple->canEat())
+                        {
+                            $content[] = Html::button('Скушать', ['class' => 'btn btn-warning btn-eat',
+                                'data-url' => Url::to(['eat' , 'id' => $apple->id])]);
+                        }
+
+
+                        return implode("\n", $content);
+                    }
+                ],
 
             ],
         ]); ?>

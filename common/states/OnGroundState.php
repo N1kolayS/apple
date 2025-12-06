@@ -33,7 +33,7 @@ class OnGroundState extends BaseAppleState
             throw new Exception('Съесть нельзя, яблоко испортилось');
         }
 
-        $newSize = $this->apple->size - $percent;
+        $newSize = $this->apple->size*100 - $percent;
 
         if ($newSize <= 0) {
             $this->apple->status = Status::EATEN;

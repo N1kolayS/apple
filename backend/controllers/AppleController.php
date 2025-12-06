@@ -28,7 +28,7 @@ class AppleController extends Controller
                     'class' => AccessControl::class,
                     'rules' => [
                         [
-                            'actions' => ['index', 'generate', 'fall', 'create', 'delete'],
+                            'actions' => ['index', 'generate', 'fall', 'eat', 'delete'],
                             'allow' => true,
                             'roles' => ['@'],
                         ],
@@ -40,6 +40,7 @@ class AppleController extends Controller
                         'delete' => ['POST'],
                         'generate' => ['POST'],
                         'fall' => ['POST'],
+                        'eat' => ['POST'],
                     ],
                 ],
             ]
@@ -73,14 +74,13 @@ class AppleController extends Controller
     }
 
 
-
     /**
-     * @param int $count
      * @return void
      * @throws HttpException
      */
-    public function actionGenerate(int $count = 10): void
+    public function actionGenerate(): void
     {
+        $count = Yii::$app->request->post('count');
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         try {
             Apple::generateRandom($count);
@@ -113,6 +113,25 @@ class AppleController extends Controller
         }
     }
 
+    /**
+     * @param $id
+     * @return void
+     * @throws HttpException
+     * @throws NotFoundHttpException
+     */
+    public function actionEat($id): void
+    {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $size = Yii::$app->request->post('size');
+        $model = $this->findModel($id);
+        try {
+            $model->eat($size);
+        }
+        catch (\Exception $exception)
+        {
+            throw new HttpException(400, $exception);
+        }
+    }
 
 
     /**
