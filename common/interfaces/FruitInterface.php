@@ -31,4 +31,10 @@ interface FruitInterface
      * Проверяет, можно ли съесть яблоко
      */
     public function canEat(): bool;
+
+    /**
+     * Изображение фрукта
+     * @return string
+     */
+    public function getImage(): string;
 }

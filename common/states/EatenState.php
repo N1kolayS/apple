@@ -31,4 +31,9 @@ class EatenState extends BaseAppleState
     {
         return Status::EATEN;
     }
+
+    public function getImage(): string
+    {
+        return 'blank';
+    }
 }

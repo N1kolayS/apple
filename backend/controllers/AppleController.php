@@ -28,7 +28,7 @@ class AppleController extends Controller
                     'class' => AccessControl::class,
                     'rules' => [
                         [
-                            'actions' => ['index', 'generate', 'update', 'create', 'delete'],
+                            'actions' => ['index', 'generate', 'fall', 'create', 'delete'],
                             'allow' => true,
                             'roles' => ['@'],
                         ],
@@ -39,6 +39,7 @@ class AppleController extends Controller
                     'actions' => [
                         'delete' => ['POST'],
                         'generate' => ['POST'],
+                        'fall' => ['POST'],
                     ],
                 ],
             ]
@@ -71,18 +72,7 @@ class AppleController extends Controller
         ]);
     }
 
-    /**
-     * Displays a single Apple model.
-     * @param int $id ID
-     * @return string
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
+
 
     /**
      * @param int $count
@@ -104,46 +94,26 @@ class AppleController extends Controller
     }
 
     /**
-     * Creates a new Apple model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return string|\yii\web\Response
+     * @param $id
+     * @return void
+     * @throws HttpException
+     * @throws NotFoundHttpException
      */
-    public function actionCreate()
+    public function actionFall($id): void
     {
-        $model = new Apple();
 
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
-        } else {
-            $model->loadDefaultValues();
-        }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Updates an existing Apple model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param int $id ID
-     * @return string|\yii\web\Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionUpdate($id)
-    {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $model = $this->findModel($id);
-
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        try {
+            $model->failToGround();
         }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
+        catch (\Exception $exception)
+        {
+            throw new HttpException(400, $exception);
+        }
     }
+
+
 
     /**
      * Deletes an existing Apple model.
@@ -166,7 +136,7 @@ class AppleController extends Controller
      * @return Apple the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    protected function findModel(int $id): Apple
     {
         if (($model = Apple::findOne(['id' => $id])) !== null) {
             return $model;

@@ -31,4 +31,9 @@ class RottenState extends BaseAppleState
     {
         return Status::ROTTEN;
     }
+
+    public function getImage(): string
+    {
+        return 'rotten';
+    }
 }

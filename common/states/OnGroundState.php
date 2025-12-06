@@ -8,11 +8,19 @@ use Exception;
 
 class OnGroundState extends BaseAppleState
 {
+
     public function fall(): void
     {
         throw new Exception('Яблоко уже на земле');
     }
 
+    /**
+     * @param int $percent
+     * @return void
+     * @throws \Throwable
+     * @throws \yii\db\Exception
+     * @throws \yii\db\StaleObjectException
+     */
     public function eat(int $percent): void
     {
         if ($percent <= 0 || $percent > 100) {
@@ -66,5 +74,10 @@ class OnGroundState extends BaseAppleState
     {
         $this->checkCondition();
         return $this->apple->status;
+    }
+
+    public function getImage(): string
+    {
+        return 'fresh';
     }
 }

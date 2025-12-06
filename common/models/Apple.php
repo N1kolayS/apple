@@ -7,6 +7,8 @@ use common\interfaces\FruitInterface;
 use common\interfaces\StateInterface;
 use common\states\AppleStateFactory;
 use yii\db\StaleObjectException;
+use yii\helpers\Html;
+use yii\helpers\Url;
 
 /**
  * This is the model class for table "apple".
@@ -52,6 +54,8 @@ class Apple extends \yii\db\ActiveRecord implements FruitInterface
     }
 
     /**
+     * Не очень красивое решение, но пока так.
+     * Для создания (и загрузки из Базы) яблока инициализируем переменные и создаем состояние
      * {@inheritdoc}
      * @throws \Exception
      */
@@ -59,16 +63,43 @@ class Apple extends \yii\db\ActiveRecord implements FruitInterface
     {
         parent::init();
 
-        if ($this->isNewRecord) {
-            $this->color = $this->color ?? $this->getRandomColor();
-            $this->appearance_date = time();
-            $this->status = Status::ON_TREE;
-            $this->size = 100;
-            $this->created_at = time();
-            $this->updated_at = time();
+        $this->color = $this->color ?? $this->getRandomColor();
+        $this->appearance_date = time();
+        $this->status = Status::ON_TREE;
+        $this->size = 100;
+        $this->created_at = time();
+        $this->updated_at = time();
+        $this->state = AppleStateFactory::create($this);
+
+
+    }
+
+    /**
+     * При загрузке из базы переписываем состояние
+     * @return void
+     * @throws \Exception
+     */
+    public function afterFind(): void
+    {
+        parent::afterFind();
+        $this->state = AppleStateFactory::create($this);
+    }
+
+
+    /**
+     * Проверяет, является ли модель пустой (все атрибуты null)
+     */
+    private function isEmptyModel(): bool
+    {
+        $attributes = $this->getAttributes();
+
+        foreach ($attributes as $value) {
+            if ($value !== null) {
+                return false;
+            }
         }
 
-        $this->state = AppleStateFactory::create($this);
+        return true;
     }
 
     /**
@@ -180,5 +211,10 @@ class Apple extends \yii\db\ActiveRecord implements FruitInterface
     public function remove(): void
     {
         parent::delete();
+    }
+
+    public function getImage(): string
+    {
+        return '/img/apple/'.$this->state->getImage().'.jpg';
     }
 }

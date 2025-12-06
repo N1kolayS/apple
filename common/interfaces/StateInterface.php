@@ -18,4 +18,10 @@ interface StateInterface
     public function checkCondition(): void;
     public function canEat(): bool;
     public function getStatus(): string;
+
+    /**
+     * Изображение фрукта, в зависимости от состояния
+     * @return string
+     */
+    public function getImage(): string;
 }

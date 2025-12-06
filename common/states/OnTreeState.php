@@ -48,4 +48,9 @@ class OnTreeState extends BaseAppleState
     {
         return false;
     }
+
+    public function getImage(): string
+    {
+        return 'grown';
+    }
 }
