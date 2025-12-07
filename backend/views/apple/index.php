@@ -41,8 +41,8 @@ MAIN_GRID.on('click', '.btn-eat', function (e) {
     e.preventDefault();
     let url = $(this).data('url')
     let promptSize = prompt('Сколько откусить от 1 до 100?:', '25');
-  let size = parseInt(promptSize)
-  if (size < 1 || size > 100) {
+    let size = parseInt(promptSize)
+    if (promptSize === null || size < 1 || size > 100) {
         alert('Введите число от 1 до 100');
         return;
     } 
@@ -71,10 +71,11 @@ $("#grown_apple").click(function(e) {
   let url = $(this).data('url')
   let promptApple = prompt('Сколько яблок сделать?:', '5');
   let countApple = parseInt(promptApple)
-  if (countApple < 1 || countApple > 20) {
+  if (promptApple === null || countApple < 1 || countApple > 20) {
         alert('Введите число от 1 до 20');
         return;
     } 
+  
     $.ajax({
                 url: url,
                 type: 'POST',
@@ -117,6 +118,11 @@ $this->registerJs($js);
 
                 [
                     'attribute' => 'created_at',
+                    'headerOptions' => ['width' => '100'],
+                    'format' => ['date', 'php:d-m-Y H:i:s'],
+                ],
+                [
+                    'attribute' => 'updated_at',
                     'headerOptions' => ['width' => '100'],
                     'format' => ['date', 'php:d-m-Y H:i:s'],
                 ],

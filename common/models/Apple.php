@@ -91,25 +91,29 @@ class Apple extends \yii\db\ActiveRecord implements FruitInterface
     public function afterFind(): void
     {
         parent::afterFind();
+        $this->updateCondition();
         $this->state = AppleStateFactory::create($this);
     }
 
 
     /**
-     * Проверяет, является ли модель пустой (все атрибуты null)
+     * Обновим состояние, сразу после получения данных
+     * @return void
      */
-    private function isEmptyModel(): bool
+    private function updateCondition(): void
     {
-        $attributes = $this->getAttributes();
-
-        foreach ($attributes as $value) {
-            if ($value !== null) {
-                return false;
-            }
+        if (!$this->fall_date) {
+            return;
         }
 
-        return true;
+        $hoursOnGround = (time() - $this->fall_date) / 3600;
+
+        if ($hoursOnGround >= Apple::ROTTEN_HOURS) {
+            self::updateAll(['status' => Status::ROTTEN], ['id' => $this->id]);
+            $this->status = Status::ROTTEN;
+        }
     }
+
 
     /**
      * @param $count
