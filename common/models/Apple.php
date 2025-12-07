@@ -6,6 +6,7 @@ use common\helpers\Status;
 use common\interfaces\FruitInterface;
 use common\interfaces\StateInterface;
 use common\states\AppleStateFactory;
+use yii\behaviors\TimestampBehavior;
 use yii\db\StaleObjectException;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -24,6 +25,16 @@ use yii\helpers\Url;
  */
 class Apple extends \yii\db\ActiveRecord implements FruitInterface
 {
+
+    /**
+     * {@inheritdoc}
+     */
+    public function behaviors(): array
+    {
+        return [
+            TimestampBehavior::class,
+        ];
+    }
 
     const ROTTEN_HOURS = 5;
 
@@ -46,7 +57,7 @@ class Apple extends \yii\db\ActiveRecord implements FruitInterface
             [['fall_date'], 'default', 'value' => null],
             [['status'], 'default', 'value' => 'on_tree'],
             [['size'], 'default', 'value' => 100],
-            [['color', 'appearance_date', 'created_at', 'updated_at'], 'required'],
+            [['color', 'appearance_date'], 'required'],
             [['appearance_date', 'fall_date', 'size', 'created_at', 'updated_at'], 'integer'],
             [['color', 'status'], 'string', 'max' => 20],
             ['status', 'in', 'range' => [Status::ON_TREE, Status::ON_GROUND, Status::ROTTEN, Status::EATEN]],
@@ -67,8 +78,6 @@ class Apple extends \yii\db\ActiveRecord implements FruitInterface
         $this->appearance_date = time();
         $this->status = Status::ON_TREE;
         $this->size = 100;
-        $this->created_at = time();
-        $this->updated_at = time();
         $this->state = AppleStateFactory::create($this);
 
 
